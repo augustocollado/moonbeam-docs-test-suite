@@ -20,7 +20,10 @@ pysubstrateinterface_finality_tests = loader.discover(
     "test/builders/get-started/eth-compare/consensus-finality/substrate-libraries",
     top_level_dir=dir_path,
 )
-
+pysubstrateinterface_tests = loader.discover(
+    "test/builders/build/substrate-api/py-substrate-interface",
+    top_level_dir=dir_path,
+)
 
 def suite():
     testSuite = unittest.TestSuite()
@@ -28,6 +31,7 @@ def suite():
     testSuite.addTest(web3py_xc20_overview_local_xc20_tests)
     testSuite.addTest(web3py_finality_tests)
     testSuite.addTest(pysubstrateinterface_finality_tests)
+    testSuite.addTest(pysubstrateinterface_tests)
     return testSuite
 
 
