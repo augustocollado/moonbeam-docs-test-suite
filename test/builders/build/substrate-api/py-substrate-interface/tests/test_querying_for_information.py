@@ -12,6 +12,8 @@ class TestQueryingForinformation(unittest.TestCase):
             url="http://127.0.0.1:9944",
         )
 
+        self.account = "0xf24FF3a9CF04c71Dbc94D0b566f7A27B94566cac"
+
     ### TESTS ###
     def test_accessing_runtime_constants(self):
         ws_provider = self.ws_provider
@@ -27,7 +29,7 @@ class TestQueryingForinformation(unittest.TestCase):
     def test_retrieving_blocks_and_extrinsics(self):
         ws_provider = self.ws_provider
 
-        # As the node that the tests are run against is a fresh one, we have only the genesis block. 
+        # The node that the tests are run against is a fresh one, we have only the genesis block
         # No fun :(
 
         # Retrieve the latest block
@@ -57,10 +59,11 @@ class TestQueryingForinformation(unittest.TestCase):
 
     # def test_subscribing_to_new_block_headers(self):
     # To test a subscription pattern we'll have to mock up the library
-    # Therefore, there's no point IMHO
+    # The whole point is to test the library
         
     def test_querying_for_storage_information(self):
         ws_provider = self.ws_provider
+        account = self.account
 
         # List of available storage functions in the metadata
         method_list = ws_provider.get_metadata_storage_functions()
@@ -70,9 +73,9 @@ class TestQueryingForinformation(unittest.TestCase):
         account_info = ws_provider.query(
             module="System",
             storage_function="Account",
-            params=["0x578002f699722394afc52169069a1FfC98DA36f1"],
+            params=[account],
         )
-        self.assertTrue(account_info.value["nonce"] > 0)
+        self.assertTrue(account_info.value["nonce"] == 0)
         self.assertTrue(account_info.value["data"]["free"] > 0)
 
         # Query candidate pool information from Moonbeam's Parachain Staking module
@@ -81,7 +84,6 @@ class TestQueryingForinformation(unittest.TestCase):
         )
         # Candidates must have something at stake
         self.assertTrue(candidate_pool_info[0]["amount"] > 1000000000000000000)
-
 
     def tearDown(self) -> None:
         return super().tearDown()
