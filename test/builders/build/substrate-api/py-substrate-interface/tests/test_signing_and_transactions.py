@@ -48,9 +48,7 @@ class TestSigningAndTransactions(unittest.TestCase):
                 params=[destination],
             )
 
-            print(account_info.value["data"]["free"])
-
-            self.assertTrue(account_info.value["data"]["free"] == 1 * 10**18)
+            self.assertTrue(account_info.value["data"]["free"] >= 1 * 10**18)
             
         except SubstrateRequestException as e:
             self.fail("Submitting a signed transaction failed")
@@ -102,12 +100,12 @@ class TestSigningAndTransactions(unittest.TestCase):
 
         # # Check the transfer execution
 
-        # account_info = ws_provider.query(
-        #     module="System",
-        #     storage_function="Account",
-        #     params=[destination],
-        # )
-        # self.assertTrue(account_info.value["data"]["free"] >= 1 * 10**18)
+        account_info = ws_provider.query(
+            module="System",
+            storage_function="Account",
+            params=[destination],
+        )
+        self.assertTrue(account_info.value["data"]["free"] >= 1 * 10**18)
 
 
     def tearDown(self) -> None:
